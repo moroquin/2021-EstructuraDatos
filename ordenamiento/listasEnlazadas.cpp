@@ -4,31 +4,31 @@ using namespace std;
 
 struct nodo {
   int numero;
-  struct nodo *sgte;
-  struct nodo *ant;
+  struct nodo *siguiente;
+  struct nodo *anterior;
 };
 
-typedef struct nodo *Tlista;
+typedef struct nodo *PunteroLista;
 
-void insertarInicio(Tlista &lista, int valor) {
-  Tlista q;
+void insertarInicio(PunteroLista &lista, int valor) {
+  PunteroLista q;
   q = new (struct nodo);
   q->numero = valor;
-  q->sgte = lista;
-  q->ant = NULL;
+  q->siguiente = lista;
+  q->anterior = NULL;
 
   if (lista != NULL) {
-    lista->ant = q;
+    lista->anterior = q;
   }
 
   lista = q;
 }
 
-void mostrarNodo(Tlista nodo) {
-  cout << ' ' << nodo->ant << " <- " << nodo << " -> " << nodo->sgte << endl;
+void mostrarNodo(PunteroLista nodo) {
+  cout << ' ' << nodo->anterior << " <- " << nodo << " -> " << nodo->siguiente << endl;
 }
 
-void switchNodo(Tlista &nodo1, Tlista &nodo2, Tlista &root) {
+void switchNodo(PunteroLista &nodo1, PunteroLista &nodo2, PunteroLista &root) {
 
   if (nodo1 == root) {
     root = nodo2;
@@ -36,71 +36,71 @@ void switchNodo(Tlista &nodo1, Tlista &nodo2, Tlista &root) {
     root = nodo1;
   }
 
-  if ((nodo2->ant == nodo1) || (nodo1->sgte == nodo2)) {
-    Tlista nodo1ant = nodo1->ant;
-    Tlista nodo2sgte = nodo2->sgte;
+  if ((nodo2->anterior == nodo1) || (nodo1->siguiente == nodo2)) {
+    PunteroLista nodo1anterior = nodo1->anterior;
+    PunteroLista nodo2siguiente = nodo2->siguiente;
 
-    Tlista tmp = nodo2;
+    PunteroLista tmp = nodo2;
     nodo2 = nodo1;
     nodo1 = tmp;
 
-    nodo2->ant = nodo1;
-    nodo2->sgte = nodo2sgte;
-    nodo1->ant = nodo1ant;
-    nodo1->sgte = nodo2;
+    nodo2->anterior = nodo1;
+    nodo2->siguiente = nodo2siguiente;
+    nodo1->anterior = nodo1anterior;
+    nodo1->siguiente = nodo2;
   } else {
 
     // apuntadores
-    if (nodo1->ant != NULL) {
-      nodo1->ant->sgte = nodo2;
+    if (nodo1->anterior != NULL) {
+      nodo1->anterior->siguiente = nodo2;
     }
-    if (nodo1->sgte != NULL) {
-      nodo1->sgte->ant = nodo2;
+    if (nodo1->siguiente != NULL) {
+      nodo1->siguiente->anterior = nodo2;
     }
-    if (nodo2->ant != NULL) {
-      nodo2->ant->sgte = nodo1;
+    if (nodo2->anterior != NULL) {
+      nodo2->anterior->siguiente = nodo1;
     }
-    if (nodo2->sgte != NULL) {
-      nodo2->sgte->ant = nodo1;
+    if (nodo2->siguiente != NULL) {
+      nodo2->siguiente->anterior = nodo1;
     }
 
-    Tlista tmp2Sgte = nodo2->sgte;
-    Tlista tmp2Ant = nodo2->ant;
+    PunteroLista tmp2siguiente = nodo2->siguiente;
+    PunteroLista tmp2anterior = nodo2->anterior;
 
-    nodo2->sgte = nodo1->sgte;
-    nodo2->ant = nodo1->ant;
+    nodo2->siguiente = nodo1->siguiente;
+    nodo2->anterior = nodo1->anterior;
 
-    nodo1->sgte = tmp2Sgte;
-    nodo1->ant = tmp2Ant;
+    nodo1->siguiente = tmp2siguiente;
+    nodo1->anterior = tmp2anterior;
 
     // fin
-    Tlista tmp = nodo2;
+    PunteroLista tmp = nodo2;
     nodo2 = nodo1;
     nodo1 = tmp;
   }
 }
-void mostrarLista(Tlista lista) {
+void mostrarLista(PunteroLista lista) {
   int i = 0;
 
   while (lista != NULL) {
 
-    cout << i + 1 << ") " << ' ' << lista->ant << " <- " << lista << " -> "
-         << lista->sgte << endl;
-    lista = lista->sgte;
+    cout << i + 1 << ") " << ' ' << lista->anterior << " <- " << lista << " -> "
+         << lista->siguiente << endl;
+    lista = lista->siguiente;
     i++;
   }
   cout << endl << endl;
 }
 
 int main() {
-  Tlista lista = NULL;
+  PunteroLista lista = NULL;
   int opcion; // opcion del menu
 
   system("color 0b");
 
   do {
 
-    cout << "\n\t\tLISTA ENLAZADA DOBLE SIMPLE\n\n";
+    cout << "\n\t\PunteroLista ENLAZADA DOBLE SIMPLE\n\n";
     cout << " 1. INSERTAR                         " << endl;
     cout << " 2. MOSTRAR                          " << endl;
     cout << " 3. SWITCH PRIMEROS DOS              " << endl;
@@ -126,8 +126,8 @@ int main() {
 
       // mostrarLista(lista);
 
-      Tlista nodo1 = lista;
-      Tlista nodo2 = lista->sgte->sgte;
+      PunteroLista nodo1 = lista;
+      PunteroLista nodo2 = lista->siguiente->siguiente;
 
       mostrarLista(lista);
       switchNodo(nodo1, nodo2, lista);
