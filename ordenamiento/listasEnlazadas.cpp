@@ -25,7 +25,8 @@ void insertarInicio(PunteroLista &lista, int valor) {
 }
 
 void mostrarNodo(PunteroLista nodo) {
-  cout << ' ' << nodo->anterior << " <- " << nodo << " -> " << nodo->siguiente << endl;
+  cout << ' ' << nodo->anterior << " <- " << nodo << " -> " << nodo->siguiente
+       << endl;
 }
 
 void switchNodo(PunteroLista &nodo1, PunteroLista &nodo2, PunteroLista &root) {
@@ -36,7 +37,8 @@ void switchNodo(PunteroLista &nodo1, PunteroLista &nodo2, PunteroLista &root) {
     root = nodo1;
   }
 
-  if ((nodo2->anterior == nodo1) || (nodo1->siguiente == nodo2)) {
+  if ((nodo2->anterior == nodo1) || (nodo1->siguiente == nodo2) ||
+      (nodo1->anterior == nodo2) || (nodo2->siguiente == nodo1)) {
     PunteroLista nodo1anterior = nodo1->anterior;
     PunteroLista nodo2siguiente = nodo2->siguiente;
 
@@ -79,13 +81,47 @@ void switchNodo(PunteroLista &nodo1, PunteroLista &nodo2, PunteroLista &root) {
     nodo1 = tmp;
   }
 }
+
+void ordenarSeleccion(PunteroLista &root) {
+
+  PunteroLista ciclo1 = root;
+  PunteroLista ciclo2;
+  PunteroLista seleccionado;
+
+  while (ciclo1 != NULL) {
+    ciclo2 = ciclo1->siguiente;
+    seleccionado = ciclo1;
+    while (ciclo2 != NULL) {
+      if (ciclo2->numero > seleccionado->numero){
+        seleccionado = ciclo2;
+        mostrarNodo(seleccionado);
+        }
+      ciclo2 = ciclo2->siguiente;
+    }
+
+    if (ciclo1 != seleccionado){
+      cout << "\n\n switch entre "<< seleccionado->numero << " y " << ciclo1->numero << " \n\n" << endl;
+      switchNodo(ciclo1, seleccionado, root);
+      }
+
+    ciclo1 = ciclo1->siguiente;
+  }
+}
+
+int retornarNumero(PunteroLista nod) {
+  if (nod != NULL)
+    return nod->numero;
+  else
+    return -1;
+}
+
 void mostrarLista(PunteroLista lista) {
   int i = 0;
 
   while (lista != NULL) {
 
-    cout << i + 1 << ") " << ' ' << lista->anterior << " <- " << lista << " -> "
-         << lista->siguiente << endl;
+    cout << i + 1 << ") " << ' ' << retornarNumero(lista->anterior) << " <- "
+         << lista->numero << " -> " << retornarNumero(lista->siguiente) << endl;
     lista = lista->siguiente;
     i++;
   }
@@ -93,18 +129,18 @@ void mostrarLista(PunteroLista lista) {
 }
 
 int main() {
-  PunteroLista lista = NULL;
-  int opcion; // opcion del menu
 
-  system("color 0b");
+  PunteroLista lista = NULL;
+  int opcion;
 
   do {
 
-    cout << "\n\t\PunteroLista ENLAZADA DOBLE SIMPLE\n\n";
+    cout << "\n\n Lista enlazada doble \n\n";
     cout << " 1. INSERTAR                         " << endl;
     cout << " 2. MOSTRAR                          " << endl;
     cout << " 3. SWITCH PRIMEROS DOS              " << endl;
-    cout << " 4. SALIR                            " << endl;
+    cout << " 4. ORDENAMIENTO SELECCIÓN           " << endl;
+    cout << " 5. SALIR                            " << endl;
 
     cout << "\n INGRESE OPCION: ";
     cin >> opcion;
@@ -122,23 +158,22 @@ int main() {
 
       mostrarLista(lista);
       break;
+    case 4:
+      ordenarSeleccion(lista);
+      break;
     case 3:
-
       // mostrarLista(lista);
-
       PunteroLista nodo1 = lista;
-      PunteroLista nodo2 = lista->siguiente->siguiente;
-
+      PunteroLista nodo2 = lista->siguiente;
       mostrarLista(lista);
       switchNodo(nodo1, nodo2, lista);
       mostrarLista(lista);
-
       break;
     }
 
     cout << endl << endl;
 
-  } while (opcion != 4);
+  } while (opcion != 5);
 
   system("pause");
   return 0;
