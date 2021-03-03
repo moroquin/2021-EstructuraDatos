@@ -2,6 +2,11 @@
 #include <stdlib.h>
 using namespace std;
 
+/***
+*Ejemplo de ordenamiento
+*
+***/
+
 struct nodo {
   int numero;
   struct nodo *siguiente;
@@ -79,9 +84,14 @@ void switchNodo(PunteroLista &nodo1, PunteroLista &nodo2, PunteroLista &root) {
     PunteroLista tmp = nodo2;
     nodo2 = nodo1;
     nodo1 = tmp;
-  }
+  if (nod != NULL)
+    return nod->numero;
+  else
+    return -1;
 }
 
+void mostrarLista(PunteroLista lista) {
+  int i = 0;
 void ordenarSeleccion(PunteroLista &root) {
 
   PunteroLista ciclo1 = root;
